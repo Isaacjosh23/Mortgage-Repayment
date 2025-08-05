@@ -1,0 +1,136 @@
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap");
+
+@import "tailwindcss";
+
+:root {
+  --color-lime: hsl(61, 70%, 52%);
+  --color-red: hsl(4, 69%, 50%);
+
+  --color-slate-100: hsl(202, 86%, 94%);
+  --color-slate-300: hsl(203, 41%, 72%);
+  --color-slate-500: hsl(200, 26%, 54%);
+  --color-slate-700: hsl(200, 24%, 40%);
+  --color-slate-900: hsl(202, 55%, 16%);
+  --color-slate-1000: hsl(210, 55%, 11%);
+
+  --color-white: hsl(0, 0%, 100%);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 62.5%;
+}
+
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-slate-100);
+  margin-top: 6rem;
+  font-family: "Plus Jakarta Sans", sans-serif;
+  color: var(--color-slate-900);
+}
+
+.mortgage-inputs,
+.mortgage-outputs {
+  padding: 3rem;
+}
+
+.mortgage-outputs {
+  border-radius: 0 1.5rem 1.5rem 6rem;
+}
+
+.mortgage-amount,
+.period-interest input {
+  padding: 1rem 1.5rem;
+  font-size: 1.2rem;
+  border: 1px solid var(--color-slate-900);
+  border-radius: 6px;
+}
+
+.mortgage-amount {
+  padding-left: 5rem;
+}
+
+.mortgage-term {
+  padding-right: 5.8rem !important;
+}
+
+.mortgage-rate {
+  padding-right: 4rem !important;
+}
+
+.mortgage-amount:focus,
+.period-interest input:focus {
+  outline: none;
+}
+
+label {
+  margin-bottom: 1rem;
+}
+
+.input-radio {
+  border: 1px solid var(--color-slate-700);
+  padding: 1rem;
+  border-radius: 6px;
+}
+
+.btn-calc {
+  padding: 1rem 2rem;
+}
+
+.output-results {
+  border-top: 4px solid var(--color-lime);
+  padding: 3rem;
+}
+
+.input-icons {
+  transform: translate(-50%, 50%);
+  top: 2.8rem;
+  left: 2rem;
+  /* background: var(--color-slate-100); */
+  /* padding: 1rem 1.5rem; */
+}
+
+.input-icons-term {
+  left: 18.5rem;
+}
+
+.input-icons-rate {
+  left: 17.5rem;
+}
+
+input[type="radio"] {
+  appearance: none;
+  width: 1.6rem;
+  height: 1.6rem;
+  border: 2px solid var(--color-slate-700);
+  border-radius: 50%;
+  background: var(--color-white);
+  position: relative;
+  cursor: pointer;
+  outline: none;
+}
+
+input[type="radio"]:checked {
+  border-color: var(--color-lime);
+  background-color: var(--color-white);
+}
+
+input[type="radio"]:checked::after {
+  content: "";
+  display: block;
+  width: 0.8rem;
+  height: 0.8rem;
+  border-radius: 50%;
+  background: var(--color-lime);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
