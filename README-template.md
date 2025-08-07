@@ -12,9 +12,7 @@ This is a solution to the [Mortgage repayment calculator challenge on Frontend M
   - [What I learned](#what-i-learned)
   - [Continued development](#continued-development)
 - [Author](#author)
-- [Acknowledgments](#acknowledgments)
 
-**Note: Delete this note and update the table of contents based on what sections you keep.**
 
 ## Overview
 
@@ -110,11 +108,5 @@ I need to learn how to write functions that works
 
 ## Author
 
-- LinkedIn - [Joshua Ebhamen](https://www.your-site.com)
-- Frontend Mentor - [@Isaacjosh23](https://www.linkedin.com/in/joshua-ebhamen-4904aa344/)
-
-## Acknowledgments
-
-This is where you can give a hat tip to anyone who helped you out on this project. Perhaps you worked in a team or got some inspiration from someone else's solution. This is the perfect place to give them some credit.
-
-**Note: Delete this note and edit this section's content as necessary. If you completed this challenge by yourself, feel free to delete this section entirely.**
+- LinkedIn - [Joshua Ebhamen](https://www.linkedin.com/in/joshua-ebhamen-4904aa344/)
+- Frontend Mentor - [@Isaacjosh23](https://www.frontendmentor.io/profile/Isaacjosh23)
