@@ -1,18 +1,57 @@
+import { useState } from "react";
+
 const App = () => {
   return <MortgageRepayment />;
 };
 
 const MortgageRepayment = () => {
+  const [mortgageAmount, setMortgageAmount] = useState("");
+  const [mortgageTerm, setMortgageTerm] = useState("");
+  const [interestRate, setInterestRate] = useState("");
+
+  const principal = Number(mortgageAmount);
+  const changeToPercent = Number(interestRate / 100);
+  const monthlyInterestRate = changeToPercent / 12;
+  const totalMonthlyPayments = Number(mortgageTerm) * 12;
+
+  const numerator =
+    monthlyInterestRate * (1 + monthlyInterestRate) ** totalMonthlyPayments;
+
+  const denominator = (1 + monthlyInterestRate) ** 300 - 1;
+
+  const monthlyRepayment = principal * (numerator / denominator);
+
+  const totalMoneyOverTerm = monthlyRepayment * totalMonthlyPayments;
+
+  console.log(numerator, denominator, monthlyRepayment);
+
   return (
     <div className="grid grid-cols-[49rem_49rem] rounded-3xl bg-white">
-      <MortgageInputs />
+      <MortgageInputs
+        mortgageAmount={mortgageAmount}
+        setMortgageAmount={setMortgageAmount}
+        mortgageTerm={mortgageTerm}
+        setMortgageTerm={setMortgageTerm}
+        interestRate={interestRate}
+        setInterestRate={setInterestRate}
+      />
 
-      <MortgageOutputs />
+      <MortgageOutputs
+        monthlyRepayment={monthlyRepayment}
+        totalMoneyOverTerm={totalMoneyOverTerm}
+      />
     </div>
   );
 };
 
-const MortgageInputs = () => {
+const MortgageInputs = ({
+  mortgageAmount,
+  setMortgageAmount,
+  mortgageTerm,
+  setMortgageTerm,
+  interestRate,
+  setInterestRate,
+}) => {
   return (
     <div className="mortgage-inputs flex flex-col justify-center gap-11">
       <MortgageHeader />
@@ -25,6 +64,8 @@ const MortgageInputs = () => {
 
           <input
             type="text"
+            value={mortgageAmount}
+            onChange={(e) => setMortgageAmount(e.target.value)}
             className="w-full mortgage-amount text-[1.2rem] font-semibold text-[var(---color-slate-900)] relative"
           />
 
@@ -40,6 +81,8 @@ const MortgageInputs = () => {
             </label>
             <input
               type="text"
+              value={mortgageTerm}
+              onChange={(e) => setMortgageTerm(e.target.value)}
               className="text-[1.2rem] font-semibold text-[var(---color-slate-900)] mortgage-term"
             />
 
@@ -55,6 +98,8 @@ const MortgageInputs = () => {
             <div className="overflow-hidden">
               <input
                 type="text"
+                value={interestRate}
+                onChange={(e) => setInterestRate(e.target.value)}
                 className="text-[1.2rem] font-semibold text-[var(---color-slate-900)] mortgage-rate"
               />
             </div>
@@ -96,7 +141,7 @@ const MortgageInputs = () => {
   );
 };
 
-const MortgageOutputs = () => {
+const MortgageOutputs = ({ monthlyRepayment, totalMoneyOverTerm }) => {
   return (
     <div className="flex flex-col gap-14 w-full mortgage-outputs bg-[var(--color-slate-900)] text-white">
       <div className="flex flex-col gap-6">
@@ -116,7 +161,7 @@ const MortgageOutputs = () => {
           </span>
 
           <p className="text-[var(--color-lime)] text-6xl font-bold">
-            £1,797.74
+            {monthlyRepayment ? `£${monthlyRepayment.toFixed(2)}` : "£0.00"}
           </p>
         </div>
 
@@ -127,7 +172,9 @@ const MortgageOutputs = () => {
             Total you'll repay over the term
           </span>
 
-          <p className="text-2xl font-bold">£539,322.94</p>
+          <p className="text-2xl font-bold">
+            {totalMoneyOverTerm ? `£${totalMoneyOverTerm.toFixed(2)}` : "£0.00"}
+          </p>
         </div>
       </div>
     </div>
