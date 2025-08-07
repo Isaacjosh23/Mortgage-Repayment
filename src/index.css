@@ -162,8 +162,28 @@ input[type="radio"]:checked::after {
 
 .input-radio:has(input[type="radio"]:checked) {
   border-color: var(--color-lime);
+  background: #fffedc;
 }
 
 .clear-btn {
   transition: all 0.3s;
+}
+
+.error {
+  margin-top: 5px;
+}
+
+.error-border {
+  border-color: #fb2c36 !important;
+}
+
+@media (max-width: 40rem) {
+  .mortgage-empty,
+  .mortgage-outputs {
+    border-radius: 0 0 1.5rem 1.5rem;
+  }
+
+  .mortgage-repayment {
+    margin-bottom: 5rem;
+  }
 }

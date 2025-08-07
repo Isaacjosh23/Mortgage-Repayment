@@ -7,6 +7,9 @@ const App = () => {
 const MortgageRepayment = () => {
   const [empty, setEmpty] = useState(true);
 
+  // Error State
+  const [fieldError, setFieldError] = useState(false);
+
   // States to Controll and Calculate the values
   const [mortgageAmount, setMortgageAmount] = useState("");
   const [mortgageTerm, setMortgageTerm] = useState("");
@@ -23,9 +26,11 @@ const MortgageRepayment = () => {
   const handleCalculate = () => {
     if (!mortgageAmount || !mortgageTerm || !interestRate) {
       setEmpty(true);
+      setFieldError(true);
 
       return;
     }
+    setFieldError(false);
 
     const principal = Number(mortgageAmount);
     const changeToPercent = Number(interestRate / 100);
@@ -69,7 +74,7 @@ const MortgageRepayment = () => {
   };
 
   return (
-    <div className="grid grid-cols-[49rem_49rem] rounded-3xl bg-white">
+    <div className="grid grid-cols-[49rem_49rem] max-sm:grid-cols-[30rem] rounded-3xl mortgage-repayment bg-white">
       <MortgageInputs
         mortgageAmount={mortgageAmount}
         setMortgageAmount={setMortgageAmount}
@@ -81,6 +86,7 @@ const MortgageRepayment = () => {
         setMortgageType={setMortgageType}
         onCalculate={handleCalculate}
         onClear={handleClear}
+        fieldError={fieldError}
       />
 
       {empty ? (
@@ -109,6 +115,7 @@ const MortgageInputs = ({
   setMortgageType,
   onCalculate,
   onClear,
+  fieldError,
 }) => {
   return (
     <div className="mortgage-inputs flex flex-col justify-center gap-11">
@@ -122,27 +129,64 @@ const MortgageInputs = ({
 
           <input
             type="text"
-            value={mortgageAmount}
-            onChange={(e) => setMortgageAmount(e.target.value)}
-            className="w-full mortgage-amount text-[1.2rem] font-semibold text-[var(---color-slate-900)] relative"
+            inputMode="decimal"
+            pattern="^\d*\.?\d*$"
+            value={
+              mortgageAmount
+                ? Number(mortgageAmount.replace(/,/g, "")).toLocaleString()
+                : ""
+            }
+            onChange={(e) => {
+              const rawValue = e.target.value.replace(/,/g, "");
+
+              if (rawValue === "" || /^\d*\.?\d*$/.test(rawValue)) {
+                setMortgageAmount(rawValue);
+              }
+            }}
+            className={`w-full mortgage-amount text-[1.2rem] font-semibold text-[var(---color-slate-900)] relative ${
+              fieldError && !mortgageAmount ? "error-border" : ""
+            }`}
           />
 
           <span className="text-[1.3rem] text-[var(--color-slate-900)] font-semibold absolute input-icons">
             £
           </span>
+
+          {fieldError && !mortgageAmount && (
+            <span className="error inline-block text-red-500 text-[1.2rem] font-semibold">
+              This field is required
+            </span>
+          )}
         </div>
 
-        <div className="flex items-center justify-between">
+        <div className="flex max-sm:flex-col max-sm:items-stretch items-center justify-between">
           <div className="period-interest relative">
             <label className="text-[1.2rem] text-[var(--color-slate-700)] font-semibold block">
               Mortgage Term
             </label>
             <input
               type="text"
+              inputMode="decimal"
+              pattern="^\d*\.?\d*$"
               value={mortgageTerm}
-              onChange={(e) => setMortgageTerm(e.target.value)}
-              className="text-[1.2rem] font-semibold text-[var(---color-slate-900)] mortgage-term"
+              onChange={(e) => {
+                if (
+                  e.target.value === "" ||
+                  /^\d*\.?\d*$/.test(e.target.value)
+                ) {
+                  setMortgageTerm(e.target.value);
+                }
+              }}
+              className={`text-[1.2rem] font-semibold text-[var(---color-slate-900)] mortgage-term ${
+                fieldError && !mortgageTerm ? "error-border" : ""
+              }`}
             />
+
+            {fieldError && !mortgageTerm && (
+              <span className="error inline-block text-red-500 text-[1.2rem] font-semibold">
+                This field is required
+              </span>
+            )}
 
             <span className="text-[1.3rem] text-[var(--color-slate-900)] font-semibold absolute input-icons input-icons-term">
               years
@@ -156,11 +200,28 @@ const MortgageInputs = ({
             <div className="overflow-hidden">
               <input
                 type="text"
+                inputMode="decimal"
+                pattern="^\d*\.?\d*$"
                 value={interestRate}
-                onChange={(e) => setInterestRate(e.target.value)}
-                className="text-[1.2rem] font-semibold text-[var(---color-slate-900)] mortgage-rate"
+                onChange={(e) => {
+                  if (
+                    e.target.value === "" ||
+                    /^\d*\.?\d*$/.test(e.target.value)
+                  ) {
+                    setInterestRate(e.target.value);
+                  }
+                }}
+                className={`text-[1.2rem] font-semibold text-[var(---color-slate-900)] mortgage-rate ${
+                  fieldError && !interestRate ? "error-border" : ""
+                }`}
               />
             </div>
+
+            {fieldError && !interestRate && (
+              <span className="error inline-block text-red-500 text-[1.2rem] font-semibold">
+                This field is required
+              </span>
+            )}
 
             <span className="text-[1.3rem] text-[var(--color-slate-900)] font-semibold absolute input-icons input-icons-rate">
               %
@@ -247,13 +308,19 @@ const MortgageOutputs = ({
             {isMort ? `Your monthly repayments` : "Your monthly Interests"}
           </span>
 
-          <p className="text-[var(--color-lime)] text-6xl font-bold">
+          <p className="text-[var(--color-lime)] text-6xl max-sm:text-5xl font-bold">
             {isMort
               ? monthlyRepayment
-                ? `£${monthlyRepayment.toFixed(2)}`
+                ? `£${monthlyRepayment.toLocaleString(undefined, {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })}`
                 : "£0.00"
               : interestOnly
-              ? `£${interestOnly.toFixed(2)}`
+              ? `£${interestOnly.toLocaleString(undefined, {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })}`
               : "£0.00"}
 
             {/* {monthlyRepayment ? `£${monthlyRepayment.toFixed(2)}` : "£0.00"} */}
@@ -272,10 +339,16 @@ const MortgageOutputs = ({
           <p className="text-2xl font-bold">
             {isMort
               ? totalMoneyOverTerm
-                ? `£${totalMoneyOverTerm.toFixed(2)}`
+                ? `£${totalMoneyOverTerm.toLocaleString(undefined, {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })}`
                 : "£0.00"
               : interestRepaymentOverTerm
-              ? `£${interestRepaymentOverTerm.toFixed(2)}`
+              ? `£${interestRepaymentOverTerm.toLocaleString(undefined, {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })}`
               : "£0.00"}
           </p>
         </div>
