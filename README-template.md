@@ -30,8 +30,8 @@ Users should be able to:
 
 ### Links
 
-- Solution URL: [Mortgage Repayment](https://your-solution-url.com)
-- Live Site URL: [Mortgage Repayment](https://your-live-site-url.com)
+- Solution URL: [Mortgage Repayment](https://mortpay.netlify.app/)
+- Live Site URL: [Mortgage Repayment](https://mortpay.netlify.app/)
 
 ## My process
 
